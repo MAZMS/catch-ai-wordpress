@@ -17,12 +17,16 @@ cp -a /usr/src/wordpress/wp-content/themes/catch-ai /var/www/html/wp-content/the
 chown -R www-data:www-data /var/www/html
 
 # 2. Parse host/port and wait for the database to accept connections.
+#    Uses PHP's mysqli (always present in the image) — no mysql client needed.
 DB_HOST_ONLY="${WORDPRESS_DB_HOST%%:*}"
 DB_PORT="${WORDPRESS_DB_HOST##*:}"
 [ "$DB_PORT" = "$WORDPRESS_DB_HOST" ] && DB_PORT=3306
 echo "[catch-ai] Waiting for database at ${DB_HOST_ONLY}:${DB_PORT}..."
 for i in $(seq 1 60); do
-  if mysqladmin ping -h"$DB_HOST_ONLY" -P"$DB_PORT" -u"$WORDPRESS_DB_USER" -p"$WORDPRESS_DB_PASSWORD" --silent >/dev/null 2>&1; then
+  if DBH="$DB_HOST_ONLY" DBP="$DB_PORT" php -r '
+      mysqli_report(MYSQLI_REPORT_OFF);
+      $c=@mysqli_connect(getenv("DBH"),getenv("WORDPRESS_DB_USER"),getenv("WORDPRESS_DB_PASSWORD"),"",(int)getenv("DBP"));
+      exit($c?0:1);' >/dev/null 2>&1; then
     echo "[catch-ai] Database is up."
     break
   fi
