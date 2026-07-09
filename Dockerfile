@@ -10,6 +10,10 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends less default-mysql-client \
     && rm -rf /var/lib/apt/lists/*
 
+# Ensure exactly one Apache MPM is active (prefork, as PHP mod_php requires).
+RUN a2dismod mpm_event mpm_worker 2>/dev/null || true; \
+    a2enmod mpm_prefork 2>/dev/null || true
+
 # Bake the theme into the image. The official entrypoint seeds
 # /usr/src/wordpress -> /var/www/html on first boot, so the theme ships with it.
 COPY catch-ai /usr/src/wordpress/wp-content/themes/catch-ai

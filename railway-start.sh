@@ -1,26 +1,46 @@
 #!/bin/bash
 # Startup script for the Catch AI WordPress container on Railway.
-# Runs after the base image's docker-entrypoint.sh has written wp-config.php.
+# We override the image CMD, so we must do the WordPress setup the official
+# entrypoint would normally do (seed core, create wp-config) ourselves.
 set -uo pipefail
 
 WP="wp --allow-root --path=/var/www/html"
 
-# 1. Make sure the baked theme is present/updated even if /var/www/html is a volume.
+# 1. Seed WordPress core into /var/www/html if it isn't there yet.
+if [ ! -f /var/www/html/wp-load.php ]; then
+  echo "[catch-ai] Seeding WordPress core files..."
+  cp -a /usr/src/wordpress/. /var/www/html/
+fi
+# Always refresh the baked theme (covers image updates on redeploy).
 mkdir -p /var/www/html/wp-content/themes
-cp -r /usr/src/wordpress/wp-content/themes/catch-ai /var/www/html/wp-content/themes/ 2>/dev/null || true
-chown -R www-data:www-data /var/www/html/wp-content/themes/catch-ai 2>/dev/null || true
+cp -a /usr/src/wordpress/wp-content/themes/catch-ai /var/www/html/wp-content/themes/ 2>/dev/null || true
+chown -R www-data:www-data /var/www/html
 
-# 2. Wait for the database to accept connections (up to ~2 minutes).
-echo "[catch-ai] Waiting for database at ${WORDPRESS_DB_HOST:-unset}..."
+# 2. Parse host/port and wait for the database to accept connections.
+DB_HOST_ONLY="${WORDPRESS_DB_HOST%%:*}"
+DB_PORT="${WORDPRESS_DB_HOST##*:}"
+[ "$DB_PORT" = "$WORDPRESS_DB_HOST" ] && DB_PORT=3306
+echo "[catch-ai] Waiting for database at ${DB_HOST_ONLY}:${DB_PORT}..."
 for i in $(seq 1 60); do
-  if $WP db check >/dev/null 2>&1; then
+  if mysqladmin ping -h"$DB_HOST_ONLY" -P"$DB_PORT" -u"$WORDPRESS_DB_USER" -p"$WORDPRESS_DB_PASSWORD" --silent >/dev/null 2>&1; then
     echo "[catch-ai] Database is up."
     break
   fi
   sleep 2
 done
 
-# 3. Install WordPress if it isn't installed yet.
+# 3. Create wp-config.php if missing.
+if [ ! -f /var/www/html/wp-config.php ]; then
+  echo "[catch-ai] Creating wp-config.php..."
+  $WP config create \
+    --dbhost="$WORDPRESS_DB_HOST" \
+    --dbname="$WORDPRESS_DB_NAME" \
+    --dbuser="$WORDPRESS_DB_USER" \
+    --dbpass="$WORDPRESS_DB_PASSWORD" \
+    --skip-check --force
+fi
+
+# 4. Install WordPress if it isn't installed yet.
 if ! $WP core is-installed >/dev/null 2>&1; then
   echo "[catch-ai] Installing WordPress..."
   $WP core install \
@@ -29,21 +49,19 @@ if ! $WP core is-installed >/dev/null 2>&1; then
     --admin_user="${WP_ADMIN_USER:-admin}" \
     --admin_password="${WP_ADMIN_PASSWORD:-changeme123}" \
     --admin_email="${WP_ADMIN_EMAIL:-admin@example.com}" \
-    --skip-email || echo "[catch-ai] core install returned non-zero (may already be installed)."
+    --skip-email
 else
   echo "[catch-ai] WordPress already installed."
 fi
 
-# 4. Keep home/siteurl in sync with the Railway public domain.
+# 5. Keep home/siteurl in sync with the Railway domain and activate the theme.
 if [ -n "${WP_URL:-}" ]; then
   $WP option update home "${WP_URL}" >/dev/null 2>&1 || true
   $WP option update siteurl "${WP_URL}" >/dev/null 2>&1 || true
 fi
-
-# 5. Activate the Catch AI theme and make the landing the front page.
 $WP theme activate catch-ai >/dev/null 2>&1 || true
-$WP rewrite structure '/%postname%/' >/dev/null 2>&1 || true
-$WP rewrite flush >/dev/null 2>&1 || true
+$WP rewrite structure '/%postname%/' --hard >/dev/null 2>&1 || true
+chown -R www-data:www-data /var/www/html/wp-content 2>/dev/null || true
 
 echo "[catch-ai] Startup complete. Handing off to Apache."
 
