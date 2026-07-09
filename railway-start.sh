@@ -67,7 +67,17 @@ $WP theme activate catch-ai >/dev/null 2>&1 || true
 $WP rewrite structure '/%postname%/' --hard >/dev/null 2>&1 || true
 chown -R www-data:www-data /var/www/html/wp-content 2>/dev/null || true
 
+# 6. Runtime safety: guarantee exactly one Apache MPM (prefork) on the LIVE fs.
+rm -f /etc/apache2/mods-enabled/mpm_event.load /etc/apache2/mods-enabled/mpm_event.conf \
+      /etc/apache2/mods-enabled/mpm_worker.load /etc/apache2/mods-enabled/mpm_worker.conf 2>/dev/null || true
+if [ ! -e /etc/apache2/mods-enabled/mpm_prefork.load ]; then
+  ln -sf /etc/apache2/mods-available/mpm_prefork.load /etc/apache2/mods-enabled/mpm_prefork.load 2>/dev/null || true
+  ln -sf /etc/apache2/mods-available/mpm_prefork.conf /etc/apache2/mods-enabled/mpm_prefork.conf 2>/dev/null || true
+fi
+echo "[catch-ai] MPM DIAG mods-enabled:"; ls /etc/apache2/mods-enabled/ | grep -i mpm || echo "  (none)"
+echo "[catch-ai] MPM DIAG LoadModule refs:"; grep -rniE 'LoadModule[[:space:]]+mpm' /etc/apache2/ 2>/dev/null || echo "  (none)"
+
 echo "[catch-ai] Startup complete. Handing off to Apache."
 
-# 6. Run Apache in the foreground (container's main process).
+# 7. Run Apache in the foreground (container's main process).
 exec apache2-foreground
