@@ -33,7 +33,8 @@ for i in $(seq 1 60); do
   sleep 2
 done
 
-# 3. Create wp-config.php if missing.
+# 3. Create wp-config.php if missing, including the reverse-proxy SSL fix so
+#    WordPress generates https URLs behind Railway's TLS-terminating edge.
 if [ ! -f /var/www/html/wp-config.php ]; then
   echo "[catch-ai] Creating wp-config.php..."
   $WP config create \
@@ -41,7 +42,32 @@ if [ ! -f /var/www/html/wp-config.php ]; then
     --dbname="$WORDPRESS_DB_NAME" \
     --dbuser="$WORDPRESS_DB_USER" \
     --dbpass="$WORDPRESS_DB_PASSWORD" \
-    --skip-check --force
+    --skip-check --force \
+    --extra-php <<'PHP'
+// Railway terminates TLS at the edge; trust the forwarded protocol so
+// WordPress builds https asset URLs (prevents mixed-content blocking).
+if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+    $_SERVER['HTTPS'] = 'on';
+}
+if (getenv('WP_URL')) {
+    define('WP_HOME', getenv('WP_URL'));
+    define('WP_SITEURL', getenv('WP_URL'));
+}
+define('FORCE_SSL_ADMIN', true);
+PHP
+fi
+
+# Safety net: if an existing wp-config.php lacks the proxy fix, inject it.
+if ! grep -q 'HTTP_X_FORWARDED_PROTO' /var/www/html/wp-config.php 2>/dev/null; then
+  echo "[catch-ai] Patching existing wp-config.php with SSL proxy fix..."
+  php -r '
+    $f="/var/www/html/wp-config.php";
+    $c=file_get_contents($f);
+    $inj="if (isset(\$_SERVER[\"HTTP_X_FORWARDED_PROTO\"]) && \$_SERVER[\"HTTP_X_FORWARDED_PROTO\"]===\"https\") { \$_SERVER[\"HTTPS\"]=\"on\"; }\n";
+    if (getenv("WP_URL")) { $inj.="if(!defined(\"WP_HOME\")) define(\"WP_HOME\", getenv(\"WP_URL\"));\nif(!defined(\"WP_SITEURL\")) define(\"WP_SITEURL\", getenv(\"WP_URL\"));\n"; }
+    $c=preg_replace("/^<\?php/", "<?php\n".$inj, $c, 1);
+    file_put_contents($f, $c);
+  ' || true
 fi
 
 # 4. Install WordPress if it isn't installed yet.
