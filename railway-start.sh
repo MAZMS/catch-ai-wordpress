@@ -77,7 +77,15 @@ fi
 echo "[catch-ai] MPM DIAG mods-enabled:"; ls /etc/apache2/mods-enabled/ | grep -i mpm || echo "  (none)"
 echo "[catch-ai] MPM DIAG LoadModule refs:"; grep -rniE 'LoadModule[[:space:]]+mpm' /etc/apache2/ 2>/dev/null || echo "  (none)"
 
-echo "[catch-ai] Startup complete. Handing off to Apache."
+# 7. Listen on the port Railway routes to (defaults to 80).
+: "${PORT:=80}"
+if [ "$PORT" != "80" ]; then
+  echo "[catch-ai] Configuring Apache to listen on port ${PORT}..."
+  sed -ri "s/^Listen 80$/Listen ${PORT}/" /etc/apache2/ports.conf || true
+  sed -ri "s/<VirtualHost \*:80>/<VirtualHost *:${PORT}>/" /etc/apache2/sites-enabled/000-default.conf || true
+fi
 
-# 7. Run Apache in the foreground (container's main process).
+echo "[catch-ai] Startup complete. Handing off to Apache on port ${PORT}."
+
+# 8. Run Apache in the foreground (container's main process).
 exec apache2-foreground
