@@ -10,9 +10,14 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends less default-mysql-client \
     && rm -rf /var/lib/apt/lists/*
 
-# Ensure exactly one Apache MPM is active (prefork, as PHP mod_php requires).
-RUN a2dismod mpm_event mpm_worker 2>/dev/null || true; \
-    a2enmod mpm_prefork 2>/dev/null || true
+# Ensure EXACTLY one Apache MPM is active (prefork, required by mod_php).
+# Remove any enabled MPM symlinks, then enable only prefork. The final line
+# prints the active MPM into the build logs so the result is verifiable.
+RUN set -eux; \
+    rm -f /etc/apache2/mods-enabled/mpm_*.load /etc/apache2/mods-enabled/mpm_*.conf; \
+    ln -sf /etc/apache2/mods-available/mpm_prefork.load /etc/apache2/mods-enabled/mpm_prefork.load; \
+    ln -sf /etc/apache2/mods-available/mpm_prefork.conf /etc/apache2/mods-enabled/mpm_prefork.conf; \
+    apache2ctl -t -D DUMP_MODULES 2>&1 | grep -i mpm
 
 # Bake the theme into the image. The official entrypoint seeds
 # /usr/src/wordpress -> /var/www/html on first boot, so the theme ships with it.
