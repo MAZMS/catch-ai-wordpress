@@ -150,7 +150,7 @@ HERO_CSS = """<style>
   border-radius:24px;overflow:hidden;box-shadow:0 30px 60px -20px rgba(20,30,60,.4);z-index:1}
 #ca-notif{position:absolute;right:0;top:0;width:auto;max-width:258px;z-index:8}
 #ca-replied{position:absolute;left:30%;top:84px;z-index:8;width:-webkit-max-content;width:max-content}
-#ca-phone{position:absolute;left:0;bottom:0;width:min(60%,300px)!important;z-index:5}
+#ca-phone{position:absolute;left:0;bottom:0;width:min(74%,360px)!important;z-index:5}
 @media(max-width:1024px){
   #ca-hero-visual,#ca-hero-visual>.e-con-inner{min-height:560px}
   #ca-van{width:min(90%,380px);height:360px}
@@ -325,8 +325,8 @@ def hero():
             heading("HOT LEAD", "div", GREEN, 11, "700", SANS, "left", ls=1),
             para('"need someone to replace a hot water system asap"', INK, 13, "left"),
         ], direction="column", gap_px=4, bg=ACCENT, radius=12, pad=px(11,13,11,13),
-            extra={"margin": px(6,14,14,14)}),
-    ], direction="column", gap_px=8, bg=CARD, radius=24, pad=px(4,4,10,4))
+            extra={"margin": px(8,10,6,10)}),
+    ], direction="column", gap_px=8, bg=CARD, radius=24, pad=px(6,6,16,6))
     phone = container([screen], direction="column", bg=INK, radius=34, pad=px(12),
                       extra={"_element_id": "ca-phone",
                              "box_shadow_box_shadow_type": "yes",
