@@ -149,7 +149,7 @@ HERO_CSS = """<style>
 #ca-van{position:absolute;right:0;top:24px;width:min(86%,420px);height:410px;
   border-radius:24px;overflow:hidden;box-shadow:0 30px 60px -20px rgba(20,30,60,.4);z-index:1}
 #ca-notif{position:absolute;right:0;top:0;width:auto;max-width:258px;z-index:8}
-#ca-replied{position:absolute;left:30%;top:84px;z-index:8;width:-webkit-max-content;width:max-content}
+#ca-replied{position:absolute;left:34%;top:34px;z-index:8;width:-webkit-max-content;width:max-content}
 #ca-phone{position:absolute;left:0;bottom:0;width:min(74%,360px)!important;z-index:5}
 @media(max-width:1024px){
   #ca-hero-visual,#ca-hero-visual>.e-con-inner{min-height:560px}
