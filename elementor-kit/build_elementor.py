@@ -135,9 +135,11 @@ def html_widget(code):
 HERO_CSS = """<style>
 /* --- Sticky translucent header (the reference header "follows anywhere") --- */
 #site-header{position:-webkit-sticky;position:sticky;top:0;z-index:999;
-  padding-top:13px!important;padding-bottom:13px!important;
+  padding-top:12px!important;padding-bottom:12px!important;
   background:rgba(190,222,252,.9)!important;
   -webkit-backdrop-filter:saturate(140%) blur(10px);backdrop-filter:saturate(140%) blur(10px)}
+/* remove Elementor's default 10px container padding inside the header so it stays compact */
+#site-header .e-con,#site-header .e-con-inner{padding-top:0!important;padding-bottom:0!important}
 #site-header .elementor-heading-title{white-space:nowrap}
 /* --- Hero layered composition: large van photo, smaller phone overlapping
        its lower-left, notification card clear at top-right, replied badge --- */
