@@ -1,0 +1,91 @@
+{
+ "system_colors": [
+  {
+   "_id": "primary",
+   "title": "Primary",
+   "color": "#181f2e"
+  },
+  {
+   "_id": "secondary",
+   "title": "Secondary",
+   "color": "#505561"
+  },
+  {
+   "_id": "text",
+   "title": "Text",
+   "color": "#161b24"
+  },
+  {
+   "_id": "accent",
+   "title": "Accent",
+   "color": "#d5f64e"
+  }
+ ],
+ "custom_colors": [
+  {
+   "_id": "ca_sky",
+   "title": "Sky",
+   "color": "#91d0fc"
+  },
+  {
+   "_id": "ca_ink2",
+   "title": "Ink 2",
+   "color": "#0e141f"
+  },
+  {
+   "_id": "ca_mint",
+   "title": "Mint",
+   "color": "#d3edd3"
+  },
+  {
+   "_id": "ca_bg",
+   "title": "Background",
+   "color": "#fbfaf6"
+  },
+  {
+   "_id": "ca_accent",
+   "title": "Accent Green",
+   "color": "#cafacb"
+  },
+  {
+   "_id": "ca_card",
+   "title": "Card",
+   "color": "#ffffff"
+  },
+  {
+   "_id": "ca_border",
+   "title": "Border",
+   "color": "#e0ded7"
+  }
+ ],
+ "system_typography": [
+  {
+   "_id": "primary",
+   "title": "Primary",
+   "typography_typography": "custom",
+   "typography_font_family": "Fraunces",
+   "typography_font_weight": "500"
+  },
+  {
+   "_id": "secondary",
+   "title": "Secondary",
+   "typography_typography": "custom",
+   "typography_font_family": "Inter",
+   "typography_font_weight": "500"
+  },
+  {
+   "_id": "text",
+   "title": "Text",
+   "typography_typography": "custom",
+   "typography_font_family": "Inter",
+   "typography_font_weight": "400"
+  },
+  {
+   "_id": "accent",
+   "title": "Accent",
+   "typography_typography": "custom",
+   "typography_font_family": "Inter",
+   "typography_font_weight": "600"
+  }
+ ]
+}

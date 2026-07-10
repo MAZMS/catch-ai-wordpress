@@ -1,0 +1,33 @@
+/* ============================================================
+   Catch AI — optional custom CSS
+   Add via: Appearance → Customize → Additional CSS
+   (works on free Elementor; the design itself does NOT require this —
+    it only adds the sticky header and smooth anchor scrolling that the
+    original site has and that free Elementor can't set from the UI.)
+   ============================================================ */
+
+/* Smooth scroll for the in-page nav anchors (#how, #who, #pricing, #faq, #demo) */
+html { scroll-behavior: smooth; }
+
+/* Sticky translucent header.
+   The header is the FIRST top-level container on the page. If you gave the
+   header container a CSS ID of "site-header" in Elementor (Advanced → CSS ID),
+   replace the selector below with #site-header. */
+.elementor-element > .e-con-inner:first-child,
+#site-header {
+  /* no-op placeholder to keep specificity notes together */
+}
+#site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: saturate(140%) blur(10px);
+}
+
+/* Nav links: subtle hover */
+#site-header a:hover { opacity: 1; }
+
+/* Keep the phone/chat mock and cards from overflowing on small screens */
+@media (max-width: 767px) {
+  .elementor-widget-heading .elementor-heading-title { word-break: break-word; }
+}
