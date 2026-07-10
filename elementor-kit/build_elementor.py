@@ -168,7 +168,7 @@ def container(elements, direction="column", align=None, justify=None, gap_px=24,
 
 def section(children, bg=None, bg_image=None, pad_y=96, pad_y_tab=80, pad_y_mob=64,
             max_w=1200, inner_dir="column", inner_align="stretch", inner_gap=24,
-            align="center", extra=None, inner_extra=None, el_id=None):
+            align=None, extra=None, inner_extra=None, el_id=None):
     inner_s = {"content_width": "boxed", "width": sz(max_w),
                "flex_direction": inner_dir, "flex_gap": gap(inner_gap),
                "flex_align_items": inner_align, "flex_wrap": "wrap"}
@@ -177,10 +177,11 @@ def section(children, bg=None, bg_image=None, pad_y=96, pad_y_tab=80, pad_y_mob=
     if inner_extra: inner_s.update(inner_extra)
     inner = C(inner_s, children, inner=True)
     s = {"content_width": "full", "flex_direction": "column",
-         "flex_align_items": align,
          "padding": px(pad_y, 20, pad_y, 20),
          "padding_tablet": px(pad_y_tab, 24, pad_y_tab, 24),
          "padding_mobile": px(pad_y_mob, 16, pad_y_mob, 16)}
+    if align:
+        s["flex_align_items"] = align
     if bg:
         s["background_background"] = "classic"; s["background_color"] = bg
     if bg_image:
@@ -554,8 +555,8 @@ def faq():
         "content_typography_font_size": sz(16), "content_typography_line_height": sz(1.6, "em"),
     })
     body = container([acc], direction="column", boxed=True, max_w=840, width=100)
-    return section([head, body], bg=BG, inner_gap=48, align="center", el_id="faq",
-                   inner_extra={"width": sz(1200), "flex_align_items": "center"})
+    return section([head, body], bg=BG, inner_gap=48, el_id="faq",
+                   inner_extra={"width": sz(1200)})
 
 DEMO_FORM_HTML = """<div class="ca-demo-form">
   <label>Your name</label>

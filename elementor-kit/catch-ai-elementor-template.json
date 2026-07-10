@@ -14,7 +14,6 @@
    "settings": {
     "content_width": "full",
     "flex_direction": "column",
-    "flex_align_items": "center",
     "padding": {
      "unit": "px",
      "top": 18,
@@ -413,7 +412,6 @@
    "settings": {
     "content_width": "full",
     "flex_direction": "column",
-    "flex_align_items": "center",
     "padding": {
      "unit": "px",
      "top": 96,
@@ -1483,7 +1481,6 @@
    "settings": {
     "content_width": "full",
     "flex_direction": "column",
-    "flex_align_items": "center",
     "padding": {
      "unit": "px",
      "top": 72,
@@ -1881,7 +1878,6 @@
    "settings": {
     "content_width": "full",
     "flex_direction": "column",
-    "flex_align_items": "center",
     "padding": {
      "unit": "px",
      "top": 96,
@@ -2629,7 +2625,6 @@
    "settings": {
     "content_width": "full",
     "flex_direction": "column",
-    "flex_align_items": "center",
     "padding": {
      "unit": "px",
      "top": 96,
@@ -3873,7 +3868,6 @@
    "settings": {
     "content_width": "full",
     "flex_direction": "column",
-    "flex_align_items": "center",
     "padding": {
      "unit": "px",
      "top": 96,
@@ -5020,7 +5014,6 @@
    "settings": {
     "content_width": "full",
     "flex_direction": "column",
-    "flex_align_items": "center",
     "padding": {
      "unit": "px",
      "top": 96,
@@ -6143,7 +6136,6 @@
    "settings": {
     "content_width": "full",
     "flex_direction": "column",
-    "flex_align_items": "center",
     "padding": {
      "unit": "px",
      "top": 96,
@@ -7163,7 +7155,6 @@
    "settings": {
     "content_width": "full",
     "flex_direction": "column",
-    "flex_align_items": "center",
     "padding": {
      "unit": "px",
      "top": 96,
@@ -7211,7 +7202,7 @@
        "column": "48",
        "row": "48"
       },
-      "flex_align_items": "center",
+      "flex_align_items": "stretch",
       "flex_wrap": "wrap"
      },
      "elements": [
@@ -7454,7 +7445,6 @@
    "settings": {
     "content_width": "full",
     "flex_direction": "column",
-    "flex_align_items": "center",
     "padding": {
      "unit": "px",
      "top": 96,
@@ -8178,7 +8168,6 @@
    "settings": {
     "content_width": "full",
     "flex_direction": "column",
-    "flex_align_items": "center",
     "padding": {
      "unit": "px",
      "top": 72,
