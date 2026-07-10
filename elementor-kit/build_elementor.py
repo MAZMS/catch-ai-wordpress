@@ -150,7 +150,7 @@ HERO_CSS = """<style>
   border-radius:24px;overflow:hidden;box-shadow:0 30px 60px -20px rgba(20,30,60,.4);z-index:1}
 #ca-van>.e-con-inner,#ca-van .elementor-widget-image,#ca-van .elementor-widget-container{height:100%!important;margin:0;padding:0}
 #ca-van img{width:100%;height:100%;object-fit:cover;display:block;border-radius:24px}
-#ca-notif{position:absolute;right:0;top:0;width:auto;max-width:258px;z-index:8}
+#ca-notif{position:absolute;right:0;top:0;width:auto;max-width:210px;z-index:8}
 #ca-replied{position:absolute;left:21%;top:34px;z-index:8;width:-webkit-max-content;width:max-content}
 #ca-phone{position:absolute;left:0;bottom:0;width:min(66%,325px)!important;z-index:5}
 @media(max-width:1024px){
