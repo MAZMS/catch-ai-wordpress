@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Catch AI — Elementor Import Guide</title>
+<style>
+  :root{--ink:#181f2e;--accent:#0b7285;--muted:#5c6470;--line:#e2e2dc;}
+  *{box-sizing:border-box;}
+  body{font:14px/1.5 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--ink);margin:0;padding:32px 40px;max-width:820px;}
+  h1{font-size:22px;margin:0 0 2px;}
+  .sub{color:var(--muted);margin:0 0 18px;font-size:13px;}
+  h2{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin:18px 0 8px;border-bottom:1px solid var(--line);padding-bottom:4px;}
+  ol{margin:0;padding-left:20px;}
+  ol li{margin:0 0 7px;}
+  code{background:#f3f3ef;padding:1px 5px;border-radius:4px;font-size:12.5px;}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 24px;font-size:13px;margin:4px 0 0;}
+  .grid div{padding:2px 0;border-bottom:1px dotted var(--line);}
+  .note{background:#f6faf9;border-left:3px solid var(--accent);padding:8px 12px;margin:10px 0;font-size:13px;border-radius:0 6px 6px 0;}
+  .foot{margin-top:20px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:8px;}
+  b{font-weight:600;}
+  @media print{body{padding:16px 20px;}}
+</style>
+</head>
+<body>
+  <h1>Catch AI — WordPress / Elementor Import Guide</h1>
+  <p class="sub">Everything to put this page on your own WordPress site. Works on free Elementor — no Pro required.</p>
+
+  <h2>What you need</h2>
+  <ol>
+    <li>A WordPress site (any host).</li>
+    <li><b>Elementor</b> (free) — <i>Plugins → Add New →</i> search <b>Elementor</b> → Install → Activate.</li>
+    <li>The files in this kit (the <code>.json</code> template + the <code>assets/</code> images).</li>
+  </ol>
+
+  <h2>Import in 5 steps</h2>
+  <ol>
+    <li><b>Import the template:</b> <i>Templates → Saved Templates → Import Templates</i> → upload <code>catch-ai-elementor-template.json</code> → <b>Import Now</b>.</li>
+    <li><b>Create a page:</b> <i>Pages → Add New</i> → give it a title → click <b>Edit with Elementor</b>.</li>
+    <li><b>Insert the design:</b> in the editor, open the <b>folder / library</b> icon → <b>My Templates</b> → find <b>Catch AI — Home</b> → <b>Insert</b>.</li>
+    <li><b>Set full-width layout:</b> Page Settings (gear, bottom-left) → <b>Page Layout → Elementor Canvas</b> → <b>Publish</b>. <span style="color:var(--muted)">(This removes the theme header/footer — the design ships its own.)</span></li>
+    <li><b>Set the global colors &amp; fonts:</b> <i>Elementor → Site Settings → Global Colors / Global Fonts</i> using the table below.</li>
+  </ol>
+
+  <div class="note"><b>No extra CSS setup:</b> the sticky header and the hero's layered phone/photo are driven by a small CSS block that travels <i>inside</i> the template (an HTML widget in the hero), so a fresh import carries it automatically.</div>
+
+  <h2>Global styles (Fonts: Fraunces headings · Inter body)</h2>
+  <div class="grid">
+    <div><b>Primary</b> — #181f2e</div><div><b>Sky</b> (hero bg) — #91d0fc</div>
+    <div><b>Text</b> — #161b24</div><div><b>Mint</b> (who-it's-for) — #d3edd3</div>
+    <div><b>Secondary</b> (muted) — #505561</div><div><b>Background</b> — #fbfaf6</div>
+    <div><b>Accent</b> (lime buttons) — #d5f64e</div><div><b>Ink 2</b> (dark section) — #0e141f</div>
+  </div>
+
+  <h2>Images (optional — host them on your site)</h2>
+  <ol>
+    <li>Upload the 7 files in <code>assets/</code> to the <b>Media Library</b>.</li>
+    <li>Either swap each Image widget's source in Elementor, or bulk find-replace the base URL with a plugin like <i>Better Search Replace</i>. (By default they load from the preview URL and will work immediately.)</li>
+  </ol>
+
+  <div class="foot">Full details, WP-CLI commands and the global-style applier script are in <code>README-ELEMENTOR.md</code> inside this kit. Tip: to save this as a PDF, use your browser's <b>Print → Save as PDF</b>.</div>
+</body>
+</html>
