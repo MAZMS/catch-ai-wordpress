@@ -135,29 +135,31 @@ def html_widget(code):
 HERO_CSS = """<style>
 /* --- Sticky translucent header (the reference header "follows anywhere") --- */
 #site-header{position:-webkit-sticky;position:sticky;top:0;z-index:999;
+  padding-top:13px!important;padding-bottom:13px!important;
   background:rgba(190,222,252,.9)!important;
   -webkit-backdrop-filter:saturate(140%) blur(10px);backdrop-filter:saturate(140%) blur(10px)}
 #site-header .elementor-heading-title{white-space:nowrap}
-/* --- Hero layered composition --- */
+/* --- Hero layered composition: large van photo, smaller phone overlapping
+       its lower-left, notification card clear at top-right, replied badge --- */
 #ca-hero-visual{position:relative}
-#ca-hero-visual,#ca-hero-visual>.e-con-inner{min-height:560px}
+#ca-hero-visual,#ca-hero-visual>.e-con-inner{min-height:600px}
 #ca-hero-visual>.e-con-inner{position:relative;width:100%}
-#ca-van{position:absolute;right:0;top:22px;width:min(88%,430px);height:420px;
+#ca-van{position:absolute;right:0;top:24px;width:min(86%,420px);height:410px;
   border-radius:24px;overflow:hidden;box-shadow:0 30px 60px -20px rgba(20,30,60,.4);z-index:1}
-#ca-notif{position:absolute;right:0;top:0;width:auto;max-width:264px;z-index:5}
-#ca-replied{position:absolute;left:38%;top:82px;z-index:5;width:-webkit-max-content;width:max-content}
-#ca-phone{position:absolute;left:0;bottom:0;width:min(84%,340px)!important;z-index:6}
+#ca-notif{position:absolute;right:0;top:0;width:auto;max-width:258px;z-index:8}
+#ca-replied{position:absolute;left:30%;top:84px;z-index:8;width:-webkit-max-content;width:max-content}
+#ca-phone{position:absolute;left:0;bottom:0;width:min(60%,300px)!important;z-index:5}
 @media(max-width:1024px){
-  #ca-hero-visual,#ca-hero-visual>.e-con-inner{min-height:520px}
-  #ca-van{width:min(92%,400px);height:380px}
-  #ca-replied{left:34%}
+  #ca-hero-visual,#ca-hero-visual>.e-con-inner{min-height:560px}
+  #ca-van{width:min(90%,380px);height:360px}
+  #ca-replied{left:24%}
 }
 @media(max-width:767px){
   #ca-hero-visual,#ca-hero-visual>.e-con-inner{min-height:0}
   #ca-hero-visual>.e-con-inner{display:flex;flex-direction:column;align-items:center;padding-top:8px}
   #ca-notif{position:relative;top:0;right:0;width:100%;max-width:320px;margin:0 0 12px}
   #ca-van{position:relative;top:0;right:0;width:100%;max-width:340px;height:200px}
-  #ca-phone{position:relative;left:0;bottom:0;width:100%!important;max-width:290px;margin-top:-110px}
+  #ca-phone{position:relative;left:0;bottom:0;width:100%!important;max-width:280px;margin-top:-120px}
   #ca-replied{display:none}
 }
 </style>"""
@@ -295,7 +297,7 @@ def hero():
         para("• No contract&nbsp;&nbsp;&nbsp; • Works on any phone&nbsp;&nbsp;&nbsp; "
              "• Setup in 15 minutes&nbsp;&nbsp;&nbsp; • Australian numbers",
              "#39404d", 15, "left", lh=1.8),
-    ], direction="column", gap_px=26, width=52, extra={"flex_align_items": "flex-start", "width_tablet": sz(100,"%")})
+    ], direction="column", gap_px=26, width=50, extra={"flex_align_items": "flex-start", "width_tablet": sz(100,"%")})
 
     # phone chat card
     def bubble(text, me=False):
@@ -347,7 +349,7 @@ def hero():
                     bg_image="%s/hero-plumber.jpg" % ASSET, radius=24,
                     extra={"_element_id": "ca-van"})
     right = container([html_widget(HERO_CSS), notif, replied, van, phone],
-                      direction="column", width=40,
+                      direction="column", width=42,
                       extra={"_element_id": "ca-hero-visual", "width_tablet": sz(100, "%")})
 
     row = container([left, right], direction="row", align="center", justify="space-between", gap_px=40,
