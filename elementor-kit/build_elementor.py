@@ -192,14 +192,20 @@ def section(children, bg=None, bg_image=None, pad_y=96, pad_y_tab=80, pad_y_mob=
     if extra: s.update(extra)
     return C(s, [inner])
 
+def pill(label, bg, color, size=12, weight="700", ls=1.0):
+    # A content-hugging pill: a heading widget styled via its Advanced tab, with
+    # _element_width:auto so it shrinks to its text instead of stretching full width.
+    return heading(label, "div", color, size, weight, SANS, "center",
+                   ls=ls, width_auto=True,
+                   extra={"_background_background": "classic",
+                          "_background_color": bg,
+                          "_border_radius": px(999),
+                          "_padding": px(7, 16, 7, 16)})
+
 def eyebrow(label, dark=False, align="left"):
     color = WHITE if dark else INK
     bgp = W10 if dark else K06
-    h = heading(label.upper(), "div", color=color, size=12, weight="600",
-                family=SANS, align="center", ls=1.4)
-    return container([h], direction="row", bg=bgp, radius=999,
-                     pad=px(7, 16, 7, 16), gap_px=8,
-                     extra={"_element_width": "auto"}, width=None, wrap="nowrap")
+    return pill(label.upper(), bgp, color, 12, "600", 1.4)
 
 def sec_head(eyebrow_label, title_widget, sub=None, dark=False, max_w=760):
     kids = [eyebrow(eyebrow_label, dark, "center"), title_widget]
@@ -353,9 +359,7 @@ def how():
     return section([head, row], bg=BG, inner_gap=48, el_id="how", inner_extra={"width": sz(1200)})
 
 def compare_card(tag, tag_bg, tag_color, rows, outcome, out_bg, out_color):
-    kids = [container([heading(tag.upper(), "div", tag_color, 12, "700", SANS, "left", ls=1)],
-                      direction="row", bg=tag_bg, radius=999, pad=px(6,14,6,14),
-                      extra={"_element_width": "auto"}, gap_px=0, wrap="nowrap")]
+    kids = [pill(tag.upper(), tag_bg, tag_color, 12, "700", 1)]
     for h, d in rows:
         kids.append(container([
             heading(h, "div", WHITE, 16, "600", SANS, "left"),
@@ -431,9 +435,7 @@ def price_card(tier, name, desc, price, feats, cta, dark=False, popular=False):
     muted = W70 if dark else MUTED
     kids = []
     if popular:
-        kids.append(container([heading("MOST POPULAR", "div", INK, 12, "700", SANS, "center", ls=0.8)],
-                    direction="row", bg=LIME, radius=999, pad=px(6,14,6,14),
-                    extra={"_element_width": "auto"}, gap_px=0, wrap="nowrap"))
+        kids.append(pill("MOST POPULAR", LIME, INK, 12, "700", 0.8))
     kids += [
         heading(tier.upper(), "div", muted, 12, "600", SANS, "left", ls=1.2),
         heading(name, "h3", fg, 30, "500", SERIF, "left"),
