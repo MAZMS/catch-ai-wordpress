@@ -148,8 +148,10 @@ HERO_CSS = """<style>
 #ca-hero-visual>.e-con-inner{position:relative;width:100%}
 #ca-van{position:absolute;right:0;top:24px;width:min(86%,420px);height:410px;
   border-radius:24px;overflow:hidden;box-shadow:0 30px 60px -20px rgba(20,30,60,.4);z-index:1}
+#ca-van>.e-con-inner,#ca-van .elementor-widget-image,#ca-van .elementor-widget-container{height:100%!important;margin:0;padding:0}
+#ca-van img{width:100%;height:100%;object-fit:cover;display:block;border-radius:24px}
 #ca-notif{position:absolute;right:0;top:0;width:auto;max-width:258px;z-index:8}
-#ca-replied{position:absolute;left:34%;top:34px;z-index:8;width:-webkit-max-content;width:max-content}
+#ca-replied{position:absolute;left:16%;top:32px;z-index:8;width:-webkit-max-content;width:max-content}
 #ca-phone{position:absolute;left:0;bottom:0;width:min(74%,360px)!important;z-index:5}
 @media(max-width:1024px){
   #ca-hero-visual,#ca-hero-visual>.e-con-inner{min-height:560px}
@@ -160,7 +162,7 @@ HERO_CSS = """<style>
   #ca-hero-visual,#ca-hero-visual>.e-con-inner{min-height:0}
   #ca-hero-visual>.e-con-inner{display:flex;flex-direction:column;align-items:center;padding-top:8px}
   #ca-notif{position:relative;top:0;right:0;width:100%;max-width:320px;margin:0 0 12px}
-  #ca-van{position:relative;top:0;right:0;width:100%;max-width:340px;height:200px}
+  #ca-van{position:relative;top:0;right:0;width:100%;max-width:340px;height:200px!important}
   #ca-phone{position:relative;left:0;bottom:0;width:100%!important;max-width:280px;margin-top:-120px}
   #ca-replied{display:none}
 }
@@ -347,9 +349,9 @@ def hero():
         extra={"_element_id": "ca-replied", "box_shadow_box_shadow_type": "yes",
                "box_shadow_box_shadow": {"horizontal": 0, "vertical": 10, "blur": 24,
                "spread": -8, "color": "rgba(20,30,60,0.25)"}})
-    van = container([], direction="column",
-                    bg_image="%s/hero-plumber.jpg" % ASSET, radius=24,
-                    extra={"_element_id": "ca-van"})
+    # Real <img> (not a CSS background) so it renders reliably; CSS makes it fill.
+    van = container([image("%s/hero-plumber.jpg" % ASSET, width=100)],
+                    direction="column", extra={"_element_id": "ca-van"})
     right = container([html_widget(HERO_CSS), notif, replied, van, phone],
                       direction="column", width=42,
                       extra={"_element_id": "ca-hero-visual", "width_tablet": sz(100, "%")})
