@@ -145,7 +145,7 @@ HERO_CSS = """<style>
 #ca-van{position:absolute;right:0;top:22px;width:min(88%,430px);height:420px;
   border-radius:24px;overflow:hidden;box-shadow:0 30px 60px -20px rgba(20,30,60,.4);z-index:1}
 #ca-notif{position:absolute;right:0;top:0;width:auto;max-width:264px;z-index:5}
-#ca-replied{position:absolute;left:40%;top:82px;z-index:5}
+#ca-replied{position:absolute;left:38%;top:82px;z-index:5;width:-webkit-max-content;width:max-content}
 #ca-phone{position:absolute;left:0;bottom:0;width:min(84%,340px)!important;z-index:6}
 @media(max-width:1024px){
   #ca-hero-visual,#ca-hero-visual>.e-con-inner{min-height:520px}
@@ -347,7 +347,7 @@ def hero():
                     bg_image="%s/hero-plumber.jpg" % ASSET, radius=24,
                     extra={"_element_id": "ca-van"})
     right = container([html_widget(HERO_CSS), notif, replied, van, phone],
-                      direction="column", width=44,
+                      direction="column", width=40,
                       extra={"_element_id": "ca-hero-visual", "width_tablet": sz(100, "%")})
 
     row = container([left, right], direction="row", align="center", justify="space-between", gap_px=40,
