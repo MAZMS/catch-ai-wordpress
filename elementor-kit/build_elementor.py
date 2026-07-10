@@ -129,6 +129,39 @@ def icon_list(items, color=FG, icon="fas fa-check-circle", icon_color=None, size
 def html_widget(code):
     return W("html", {"html": code})
 
+# Custom CSS that ships inside the template (in a small HTML widget) for the two
+# things free Elementor can't do from the UI: a sticky translucent header, and
+# the overlapping hero composition (phone over van photo, floating cards).
+HERO_CSS = """<style>
+/* --- Sticky translucent header (the reference header "follows anywhere") --- */
+#site-header{position:-webkit-sticky;position:sticky;top:0;z-index:999;
+  background:rgba(190,222,252,.9)!important;
+  -webkit-backdrop-filter:saturate(140%) blur(10px);backdrop-filter:saturate(140%) blur(10px)}
+#site-header .elementor-heading-title{white-space:nowrap}
+/* --- Hero layered composition --- */
+#ca-hero-visual{position:relative}
+#ca-hero-visual,#ca-hero-visual>.e-con-inner{min-height:560px}
+#ca-hero-visual>.e-con-inner{position:relative;width:100%}
+#ca-van{position:absolute;right:0;top:22px;width:min(88%,430px);height:420px;
+  border-radius:24px;overflow:hidden;box-shadow:0 30px 60px -20px rgba(20,30,60,.4);z-index:1}
+#ca-notif{position:absolute;right:0;top:0;width:auto;max-width:264px;z-index:5}
+#ca-replied{position:absolute;left:40%;top:82px;z-index:5}
+#ca-phone{position:absolute;left:0;bottom:0;width:min(84%,340px)!important;z-index:6}
+@media(max-width:1024px){
+  #ca-hero-visual,#ca-hero-visual>.e-con-inner{min-height:520px}
+  #ca-van{width:min(92%,400px);height:380px}
+  #ca-replied{left:34%}
+}
+@media(max-width:767px){
+  #ca-hero-visual,#ca-hero-visual>.e-con-inner{min-height:0}
+  #ca-hero-visual>.e-con-inner{display:flex;flex-direction:column;align-items:center;padding-top:8px}
+  #ca-notif{position:relative;top:0;right:0;width:100%;max-width:320px;margin:0 0 12px}
+  #ca-van{position:relative;top:0;right:0;width:100%;max-width:340px;height:200px}
+  #ca-phone{position:relative;left:0;bottom:0;width:100%!important;max-width:290px;margin-top:-110px}
+  #ca-replied{display:none}
+}
+</style>"""
+
 # ---------------------------------------------------------------- layout
 def container(elements, direction="column", align=None, justify=None, gap_px=24,
               bg=None, bg_image=None, pad=None, radius=None, width=None, width_unit="%",
@@ -290,22 +323,32 @@ def hero():
         ], direction="column", gap_px=4, bg=ACCENT, radius=12, pad=px(11,13,11,13),
             extra={"margin": px(6,14,14,14)}),
     ], direction="column", gap_px=8, bg=CARD, radius=24, pad=px(4,4,10,4))
-    phone = container([screen], direction="column", bg=INK, radius=34,
-                      pad=px(12), width=330, width_unit="px",
-                      extra={"align_self": "center", "box_shadow_box_shadow_type": "yes",
+    phone = container([screen], direction="column", bg=INK, radius=34, pad=px(12),
+                      extra={"_element_id": "ca-phone",
+                             "box_shadow_box_shadow_type": "yes",
                              "box_shadow_box_shadow": {"horizontal": 0, "vertical": 30,
                              "blur": 60, "spread": -20, "color": "rgba(20,30,60,0.45)"}})
     notif = container([
         heading("New lead · 0418 234 567", "div", INK, 13, "600", SANS, "left"),
         para('"need a safety inspection before settlement"', MUTED, 13, "left"),
     ], direction="column", gap_px=2, bg=CARD, radius=16, pad=px(12,16,12,16),
-        width=70, extra={"align_self": "flex-end"})
-    van = container([phone], direction="column", justify="flex-end", align="center",
+        extra={"_element_id": "ca-notif", "box_shadow_box_shadow_type": "yes",
+               "box_shadow_box_shadow": {"horizontal": 0, "vertical": 18, "blur": 40,
+               "spread": -12, "color": "rgba(20,30,60,0.30)"}})
+    replied = container([
+        heading("Catch AI", "div", "#2f7dc0", 12, "700", SANS, "left", width_auto=True),
+        heading("replied in 9s", "div", INK, 12, "600", SANS, "left", width_auto=True),
+    ], direction="row", align="center", gap_px=5, wrap="nowrap", bg=WHITE, radius=999,
+        pad=px(6, 14, 6, 14),
+        extra={"_element_id": "ca-replied", "box_shadow_box_shadow_type": "yes",
+               "box_shadow_box_shadow": {"horizontal": 0, "vertical": 10, "blur": 24,
+               "spread": -8, "color": "rgba(20,30,60,0.25)"}})
+    van = container([], direction="column",
                     bg_image="%s/hero-plumber.jpg" % ASSET, radius=24,
-                    pad=px(30,20,20,20),
-                    extra={"min_height": sz(440)})
-    right = container([notif, van], direction="column", gap_px=12, width=40,
-                    extra={"width_tablet": sz(100,"%")})
+                    extra={"_element_id": "ca-van"})
+    right = container([html_widget(HERO_CSS), notif, replied, van, phone],
+                      direction="column", width=44,
+                      extra={"_element_id": "ca-hero-visual", "width_tablet": sz(100, "%")})
 
     row = container([left, right], direction="row", align="center", justify="space-between", gap_px=40,
                     boxed=True, max_w=1200,
